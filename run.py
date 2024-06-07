@@ -3,11 +3,9 @@ import numpy as np
 import time
 
 def convert_frame_to_rgb565(frame):
-    # Resize image to 48x48 pixels using LANCZOS resampling
-    frame = frame.resize((48, 48), Image.Resampling.LANCZOS)
-    
-    # Convert image to RGB
-    frame = frame.convert("RGB")
+    frame = frame.convert('RGB')
+
+    # Convert frame to numpy array
     data = np.array(frame)
     
     # Extracting color components
@@ -35,7 +33,7 @@ def process_gif(image_path, output_path):
             # Iterate over each frame
             while True:
                 # Get frame duration (in milliseconds), convert to seconds
-                frame_duration = img.info['duration'] / 1000.0
+                frame_duration = img.info.get('duration', 100) / 1000.0  # Default to 100ms if not provided
                 
                 # Convert current frame to RGB565 and write to file
                 rgb565_bytes = convert_frame_to_rgb565(img)
@@ -56,6 +54,7 @@ def process_gif(image_path, output_path):
 def main():
     input_image_path = "./keys/s.gif"
     output_sys_file = "M:/vOptimus/normal/076.sys"
+    # output_sys_file = "./076.sys"
     process_gif(input_image_path, output_sys_file)
     print("GIF processed and displayed successfully.")
 
