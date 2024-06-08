@@ -8,6 +8,7 @@ def set_dynamic_layout(key_index, layout_path):
         # Read the entire file
         layout_data = bytearray(file.read())
         
+        key_index = int(key_index)
         # Check if the index is within the file size
         if key_index >= len(layout_data):
             raise IndexError("Key index is out of the bounds of the layout file.")
@@ -74,14 +75,10 @@ def process_gif(image_path, output_path):
                     break  # Go to the first frame and continue
 
 def main():
-    input_image_path = "./keys/s.gif"
-    output_sys_file = "M:/vOptimus/dynamic/076.sys"
     layout_path = "M:/vOptimus/layout.sys"
-    key_index = 76  # Index of the key for which to set the layout to dynamic
+    key_index = "076"  # Index of the key for which to set the layout to dynamic
     set_dynamic_layout(key_index, layout_path)
-    # output_sys_file = "./076.sys"
-    process_gif(input_image_path, output_sys_file)
-    print("GIF processed and displayed successfully.")
+    process_gif(f"./keys/{key_index}.gif", f"M:/vOptimus/dynamic/{key_index}.sys")
 
 if __name__ == "__main__":
     main()
