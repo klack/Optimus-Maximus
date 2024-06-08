@@ -2,9 +2,31 @@ from PIL import Image
 import numpy as np
 import time
 
-def convert_frame_to_rgb565(frame):
-    frame = frame.convert('RGB')
+def set_dynamic_layout(key_index, layout_path):
+    # Open the existing layout.sys file in binary read/write mode
+    with open(layout_path, 'r+b') as file:
+        # Read the entire file
+        layout_data = bytearray(file.read())
+        
+        # Check if the index is within the file size
+        if key_index >= len(layout_data):
+            raise IndexError("Key index is out of the bounds of the layout file.")
+        
+        # Set the bit at the corresponding key index to 1 for dynamic layout
+        layout_data[key_index-1] = 0x01
+        
+        # Move the file pointer to the beginning of the file
+        file.seek(0)
+        
+        # Write the updated data back to the file
+        file.write(layout_data)
+        print(f"Updated layout.sys for key index {key_index} to dynamic.")
 
+
+def convert_frame_to_rgb565(frame):
+    if frame.mode != 'RGB':
+        frame = frame.convert('RGB')
+            
     # Convert frame to numpy array
     data = np.array(frame)
     
@@ -53,7 +75,10 @@ def process_gif(image_path, output_path):
 
 def main():
     input_image_path = "./keys/s.gif"
-    output_sys_file = "M:/vOptimus/normal/076.sys"
+    output_sys_file = "M:/vOptimus/dynamic/076.sys"
+    layout_path = "M:/vOptimus/layout.sys"
+    key_index = 76  # Index of the key for which to set the layout to dynamic
+    set_dynamic_layout(key_index, layout_path)
     # output_sys_file = "./076.sys"
     process_gif(input_image_path, output_sys_file)
     print("GIF processed and displayed successfully.")
