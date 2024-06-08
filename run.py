@@ -1,7 +1,7 @@
 import threading
 from PIL import Image
 import numpy as np
-import time
+import time, os
 
 LAYOUT_PATH = "M:/vOptimus/layout.sys"
 lock = threading.Lock()
@@ -51,7 +51,7 @@ def animate_key(key_index):
     process_gif(f"./keys/{key_index}.gif", f"M:/vOptimus/dynamic/{key_index}.sys")
 
 def main():
-    keys_to_animate = ["076", "067", "049"]
+    keys_to_animate = [os.path.splitext(f)[0] for f in os.listdir("./keys/") if f.endswith('.gif')]
     threads = []
     for key in keys_to_animate:
         thread = threading.Thread(target=animate_key, args=(key,))
