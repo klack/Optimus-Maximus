@@ -4,6 +4,7 @@ import numpy as np
 import time, os
 
 LAYOUT_PATH = "M:/vOptimus/layout.sys"
+ORDER_PATH = "M:/vOptimus/order.sys"
 lock = threading.Lock()
 
 def set_dynamic_layout(key_index, layout_path):
@@ -49,10 +50,16 @@ def process_gif(image_path, output_path):
 def animate_key(key_index):
     process_gif(f"./keys/{key_index}.gif", f"M:/vOptimus/dynamic/{key_index}.sys")
 
+def set_auto_sleep_delay(delay, order_path):
+    with open(order_path, 'w') as file:
+        file.write(f"s{delay}")
+    print(f"Set auto-sleep delay to {delay} seconds in order.sys.")
+
 def main():
     keys_to_animate = [os.path.splitext(f)[0] for f in os.listdir("./keys/") if f.endswith('.gif')]
     threads = []
-    for key in keys_to_animate:
+    set_auto_sleep_delay("0030", ORDER_PATH)
+    for key in keys_to_animate: 
         set_dynamic_layout(key, LAYOUT_PATH)
         thread = threading.Thread(target=animate_key, args=(key,))
         thread.daemon = True
