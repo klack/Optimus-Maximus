@@ -47,13 +47,13 @@ def process_gif(image_path, output_path):
                 frame_number = 0
 
 def animate_key(key_index):
-    set_dynamic_layout(key_index, LAYOUT_PATH)
     process_gif(f"./keys/{key_index}.gif", f"M:/vOptimus/dynamic/{key_index}.sys")
 
 def main():
     keys_to_animate = [os.path.splitext(f)[0] for f in os.listdir("./keys/") if f.endswith('.gif')]
     threads = []
     for key in keys_to_animate:
+        set_dynamic_layout(key, LAYOUT_PATH)
         thread = threading.Thread(target=animate_key, args=(key,))
         thread.daemon = True
         threads.append(thread)
